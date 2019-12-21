@@ -1,0 +1,42 @@
+%!TEX TS-program = xelatex
+%!TEX encoding = UTF-8 Unicode
+\documentclass[11pt, a4paper]{MostafaGhadimiCV}
+\fontdir[fonts/]
+\newcommand*{\sectiondir}{resume/}
+\colorlet{awesome}{violet}
+\usepackage{import}
+\usepackage{graphicx}
+
+\name{Mostafa Ghadimi}{}
+
+\address{No. 34, Shakouri Street, Parastar Street, Pirouzi Street, Tehran, Iran. 1766687741}
+
+\mobile{+98 (912) 072 7175} 
+\email{Mostafa.Ghadimi@yahoo.com}
+\homepage{http://ce.sharif.edu/~mghadimi}
+\linkedin{MostafaGhadimi}
+
+\position{Computer Engineering}
+
+
+\makecvfooter
+  {\today}
+  {Mostafa Ghadimi~~~·~~~Résumé}
+  {\thepage}
+
+\begin{document}
+%%% Make a header for CV with personal data
+\makecvheader
+%\begin{center}
+%    \includegraphics[width = 8cm, height = 6cm]{photo}
+%\end{center}
+%%% Import contents
+\import{\sectiondir}{resume/education.tex}
+\import{\sectiondir}{resume/honorsAndAwards.tex}
+\import{\sectiondir}{resume/technicalExperience.tex}
+\import{\sectiondir}{resume/teachingExperience.tex}
+%\import{\sectiondir}{resume/researchInterests.tex}
+%\import{\sectiondir}{resume/skills.tex}
+\import{\sectiondir}{resume/languages.tex}
+
+\end{document}
