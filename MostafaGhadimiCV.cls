@@ -376,9 +376,9 @@
       \@lastname
     }
     \\
-    \vspace{0.4mm}
+    \vspace{0.1mm}
     \ifthenelse{\isundefined{\@position}}{}{\headerpositionstyle{\@position\\}}
-    \vspace{0.4mm}
+    \vspace{0.1mm}
     \ifthenelse{\isundefined{\@address}}{}{\headeraddressstyle{\@address\\}}
     \vspace{-0.5mm}
     \headersocialstyle{
@@ -463,7 +463,7 @@
     } \\
     \ifthenelse{\isundefined{\@quote}}
       {}
-      {\vspace{6.0mm}\headerquotestyle{\@quote\\}\vspace{5.0mm}}
+      {\vspace{0.0mm}\headerquotestyle{\@quote\\}\vspace{0.0mm}}
   \end{center}
 }
 
@@ -485,11 +485,11 @@
 % Define a section for CV
 % Usage: \cvsection{<section-title>}
 \newcommand{\cvsection}[1]{
-  \par\addvspace{1.5ex}
+  \par\addvspace{0ex}
   \phantomsection{}
   \sectionstyle{#1}
   \color{gray}\vhrulefill{0.9pt}
-  \par\nobreak\addvspace{1ex}
+  \par\nobreak\addvspace{0ex}
 }
 
 % Define a subsection for CV
@@ -613,7 +613,7 @@
 % Define a title of the cover letter
 % Usage: \makelettertitle
 \newcommand*{\makelettertitle}{
-  \vspace{8.4mm}
+  \vspace{5.4mm}
   \setlength\tabcolsep{0pt}
   \setlength{\extrarowheight}{0pt}
   \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} L{12.5cm} R{4.5cm}}
@@ -631,7 +631,7 @@
 % Define a closing of the cover letter
 % Usage: \makeletterclosing
 \newcommand*{\makeletterclosing}{
-  \vspace{3.4mm}
+  \vspace{2mm}
   \lettertextstyle{\@letterclosing} \\\\
   \letternamestyle{\@firstname \@lastname}
   \ifthenelse{\isundefined{\@letterenclosure}}
