@@ -1,11 +1,11 @@
-This is XeTeX, Version 3.14159265-2.6-0.99998 (TeX Live 2017/Debian) (preloaded format=xelatex 2020.7.1)  12 NOV 2020 19:42
+This is XeTeX, Version 3.14159265-2.6-0.999992 (TeX Live 2020/Debian) (preloaded format=xelatex 2021.1.18)  24 SEP 2021 07:52
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **skills.tex
 (./skills.tex
-LaTeX2e <2017-04-15>
-Babel <3.18> and hyphenation patterns for 84 language(s) loaded.
+LaTeX2e <2020-02-02> patch level 5
+L3 programming layer <2020-07-17>
 ! Undefined control sequence.
 l.1 \cvsection
               {Skills}
@@ -110,15 +110,6 @@ Missing character: There is no t in font nullfont!
 Missing character: There is no h in font nullfont!
 Missing character: There is no o in font nullfont!
 Missing character: There is no n in font nullfont!
-Missing character: There is no , in font nullfont!
-Missing character: There is no R in font nullfont!
-Missing character: There is no , in font nullfont!
-Missing character: There is no N in font nullfont!
-Missing character: There is no e in font nullfont!
-Missing character: There is no s in font nullfont!
-Missing character: There is no t in font nullfont!
-Missing character: There is no J in font nullfont!
-Missing character: There is no S in font nullfont!
 Missing character: There is no , in font nullfont!
 Missing character: There is no e in font nullfont!
 Missing character: There is no t in font nullfont!
@@ -719,11 +710,11 @@ or  <return>  to continue without it.
 
  
 Here is how much of TeX's memory you used:
- 8 strings out of 493007
- 76 string characters out of 6136720
- 63819 words of memory out of 5000000
- 4079 multiletter control sequences out of 15000+600000
- 3640 words of font info for 14 fonts, out of 8000000 for 9000
+ 17 strings out of 479712
+ 315 string characters out of 5891447
+ 250272 words of memory out of 5000000
+ 17346 multiletter control sequences out of 15000+600000
+ 535088 words of font info for 29 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 7i,1n,7p,52b,44s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 12i,1n,15p,60b,43s stack positions out of 5000i,500n,10000p,200000b,80000s
 No pages of output.
