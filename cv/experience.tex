@@ -21,6 +21,7 @@
     {Vendoroo, \textnormal{\textit{Senior AI Engineer} | Remote}}
     {Nov 2025 - Present}
     {
+      {\small\itshape AI agents for property management~--- automating tenant communication, maintenance triage, and vendor coordination.}\par\vspace{4mm}
       \begin{cvitems}
         \item Built the AI agent that talks to tenants when they report a property issue: it asks the right follow-up questions, looks at any photo they send, and either solves the problem on the spot or hands a clean summary to the property manager~--- implemented in {\bf LangChain} and {\bf LangGraph} on a {\bf FastAPI} service.
         \item Designed the agent architecture so the conversation logic (what the agent should say in each step) is cleanly separated from the supporting machinery (cleaning incoming messages, batching context, formatting replies); each piece is its own module that can be tested, reviewed, and replaced in isolation.
@@ -36,6 +37,7 @@
     {SnappPay, \textnormal{\textit{Data Engineering Tech Specialist} | Remote, Tehran}}
     {Jun 2024 - Oct 2025}
     {
+      {\small\itshape Iran's leading buy-now-pay-later (BNPL) fintech, part of the Snapp Group super-app ecosystem~--- millions of consumers and merchants across the country.}\par\vspace{4mm}
       \begin{cvitems}
         \item Joined as Senior Data Engineer and promoted to Tech Specialist after 5 months for impact on the team's platform and engineering practice.
         \item Owned hiring for the data team: ran {\bf 20+ technical interviews}, wrote the interview rubric and feedback template the team still uses, and ran candidate calibrations with the engineering manager so decisions stayed consistent across rounds.
@@ -54,6 +56,7 @@
     {IRITCO, \textnormal{\textit{Senior Data Consultant} | Remote}}
     {May 2024 - Apr 2025}
     {
+      {\small\itshape Iranian IT consultancy specialising in data platforms, data governance, and ICT solutions for enterprise and public-sector customers.}\par\vspace{4mm}
       \begin{cvitems}
         \item Led {\bf 5 engineers} through the greenfield build of a national aid-distribution analytics platform, with {\bf ClickHouse} at its core.
         \item Ran {\bf 4 architectural decision sessions} end to end (R\&D, prototype, presentation, decision log) covering analytics-database choice, ETL vs.\ ELT, and on-prem vs.\ cloud~--- so the customer could sign off on the architecture with evidence in hand rather than on instinct.
@@ -67,6 +70,7 @@
     {Mofid Securities, \textnormal{\textit{Data Architect \& Senior Data Engineer} | Tehran, Iran}}
     {Mar 2023 - May 2024}
     {
+      {\small\itshape One of Iran's largest stock brokerages and a top retail-trading platform, with millions of investor accounts.}\par\vspace{4mm}
       \begin{cvitems}
         \item Designed and built the brokerage's first analytics data platform from a blank page~--- I owned the architecture, the technology choices, and the core framework code.
         \item Ran the R\&D and tool-selection process across the full stack (analytics database, container orchestration, GitOps delivery, secret management, workflow orchestration, object storage, data catalog, BI, monitoring, logging) and wrote up the architecture as a living document the rest of the team could ramp up on.
@@ -83,6 +87,7 @@
     {Offerland, \textnormal{\textit{Cloud Engineer} | Remote, Vancouver, Canada}}
     {Apr 2023 - Nov 2024}
     {
+      {\small\itshape Vancouver-based real-estate marketplace connecting home buyers, sellers, and agents through data-driven tools.}\par\vspace{4mm}
       \begin{cvitems}
         \item Cut {\bf AWS} spend by {\bf $\sim$40\%}~--- right-sizing, Reserved Instance commitments, S3 lifecycle policies, and a sweep of orphaned compute and log retention~--- with no impact on service.
         \item Migrated the production stack off ``one EC2 box running Docker-Compose'' onto {\bf AWS ECS} behind an Application Load Balancer, with a proper image-promotion pipeline through ECR; a single-host outage was no longer a way the company could go down.
@@ -97,6 +102,7 @@
     {Digikala, \textnormal{\textit{Data Engineer $\rightarrow$ Senior Data Engineer} | Tehran, Iran}}
     {Jan 2021 - Apr 2023}
     {
+      {\small\itshape Iran's largest e-commerce platform~--- ``the Amazon of Iran''~--- among the most-visited websites in the MENA region, serving tens of millions of users.}\par\vspace{4mm}
       \begin{cvitems}
         \item Co-built {\bf Backbone}, the internal platform that gave the data-science team a one-button path from notebook to production. Backbone deploys 15+ data-science services (search, recommendation, query processing, trending, spell correction, synonym, snowplow, etc.) onto a shared {\bf Spark} + {\bf Airflow} + {\bf Pinot} stack, so data scientists ship models without writing Kubernetes YAML or pipeline code from scratch.
         \item Got {\bf up to a 10x query speed-up} on production OLAP workloads (billions of rows of clickstream and order data) by introducing {\bf Apache Pinot} with hand-tuned star-tree indexes and rewriting the heaviest dashboard queries to use them~--- dashboards that used to take tens of seconds now load instantly.
@@ -111,6 +117,7 @@
     {Lions Digital Solutions, \textnormal{\textit{Software Engineer} | Remote, Vancouver, Canada}}
     {May 2021 - May 2022}
     {
+      {\small\itshape Vancouver-based digital agency helping Amazon sellers with sales analytics, marketing automation, and CRM integrations.}\par\vspace{4mm}
       \begin{cvitems}
         \item Built a sales-analytics web app for Amazon sellers~--- periodic pulls from the {\bf Amazon} API into an analytics warehouse with dashboards on top~--- and wired up the CI/CD that ships it. Also pulled marketing and CRM data ({\bf Ontraport}, {\bf Close}, {\bf Google Ads}, {\bf Google Analytics}, {\bf Oncehub}, {\bf Thinkific}, {\bf HelloSign}) into the same warehouse so the team could see all customer signals in one place.
       \end{cvitems}
@@ -121,6 +128,7 @@
     {Hoosh Pardaz, \textnormal{\textit{Algorithmic Trader \& Data Scientist} | Tehran, Iran}}
     {Jun 2020 - Dec 2020}
     {
+      {\small\itshape Iranian quantitative-research firm developing algorithmic and systematic trading strategies for global markets.}\par\vspace{4mm}
       \begin{cvitems}
         \item Researched Crypto ETFs and built backtested trading strategies for the Canadian stock market under the supervision of Dr.\ Mahdiyeh Soleymani Baghshah and Dr.\ Hamid Behrouzi.
       \end{cvitems}
@@ -131,6 +139,7 @@
     {Wize Analytics, \textnormal{\textit{Infrastructure \& Data Engineer} | Tehran, Iran}}
     {May 2019 - Dec 2019}
     {
+      {\small\itshape Early-stage human-centered AI startup spun out of Sharif University, building NLP-driven products for Persian-language users.}\par\vspace{4mm}
       \begin{cvitems}
         \item Stood up the data infrastructure for a human-centered AI startup advised by Dr.\ Hamid R.\ Rabiee and Dr.\ Maryam Ramezani~--- message bus, search index, document store, and the developer toolchain around them~--- so the small team could focus on the product instead of the plumbing.
       \end{cvitems}

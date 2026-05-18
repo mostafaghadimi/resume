@@ -43,14 +43,24 @@
 % gutter between consecutive entries. The visible layout is otherwise
 % identical to russell.cls's original.
 % -----------------------------------------------------------------------------
-\renewcommand*{\cventrynew}[3]{%
+% NB: this is intentionally \renewcommand (not \renewcommand*) so the
+% description body (#3) can legitimately contain \par / blank lines
+% (e.g. a small italic company-context line followed by the cvitems list).
+% We inline \descriptionstyle's formatting instead of passing #3 through it,
+% because \descriptionstyle in russell.cls is itself a starred command and
+% would reject \par inside its argument.
+\renewcommand{\cventrynew}[3]{%
   \setlength\tabcolsep{0pt}%
   \setlength{\extrarowheight}{0pt}%
   \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} L{\textwidth - 4.5cm} R{4.5cm}}
     \ifempty{#1#2}
       {\entrydatestyle{#2} \\}
       {\entrytitlestyle{#1} & \entrylocationstyle{#2} \\}
-    \multicolumn{2}{L{\textwidth}}{\descriptionstyle{#3}\vspace{1mm}}
+    \multicolumn{2}{L{\textwidth}}{%
+      {\fontsize{10pt}{1em}\bodyfontlight\upshape\color{text}%
+        #3%
+      }\vspace{1mm}%
+    }
   \end{tabular*}%
   \par\addvspace{3mm}%
 }
