@@ -5,6 +5,14 @@
 
 %-------------------------------------------------------------------------------
 %	CONTENT
+%
+%	Each bullet is written so it lands for two readers at once:
+%	  - a senior engineer who wants to see the technology and the trade-offs,
+%	  - a non-technical reviewer (recruiter, hiring manager, founder) who
+%	    wants to understand the situation, the action, and the impact.
+%	The pattern is: lead with the situation/outcome in plain English, then
+%	mention the relevant tools and frameworks as supporting context (still
+%	keyword-rich for ATS).
 %-------------------------------------------------------------------------------
 \begin{cventries2}
 
@@ -14,12 +22,12 @@
     {Nov 2025 - Present}
     {
       \begin{cvitems}
-        \item Built the tenant-facing conversational agent that gathers enough detail about a property maintenance issue~--- including photo evidence~--- to either auto-troubleshoot it or hand a clean summary to the property manager, designed and implemented in {\bf LangChain} and {\bf LangGraph} on a {\bf FastAPI} service.
-        \item Designed the agent architecture so business logic (what the agent should say in each state) is cleanly separated from technical scaffolding (message cleaning, context batching, response formatting), with each concern living in its own middleware or service module so it can be tested and reviewed independently.
-        \item Added vision-model reasoning to the agent through a \texttt{before\_agent} middleware that turns a tenant photo of a damaged appliance into structured context the model can ground its replies in, plugged into the existing graph without changing downstream nodes.
-        \item Replaced the framework's built-in model fallback with a custom middleware that preserves {\bf LangSmith} traces across primary and fallback model calls, restoring end-to-end observability that the team had previously been blind to in production.
-        \item Set the architectural baseline for the next milestone of the agent platform (target-wire architecture write-up plus a decision log) and stood up the team's documentation pipeline so engineers can publish from markdown without ops involvement.
-        \item Bootstrapped the mono-repo developer experience (multi-repo orchestration, onboarding docs, multi-account SSH config) so new engineers can clone and run end-to-end on day one.
+        \item Built the AI agent that talks to tenants when they report a property issue: it asks the right follow-up questions, looks at any photo they send, and either solves the problem on the spot or hands a clean summary to the property manager~--- implemented in {\bf LangChain} and {\bf LangGraph} on a {\bf FastAPI} service.
+        \item Designed the agent architecture so the conversation logic (what the agent should say in each step) is cleanly separated from the supporting machinery (cleaning incoming messages, batching context, formatting replies); each piece is its own module that can be tested, reviewed, and replaced in isolation.
+        \item Taught the agent to ``see'': when a tenant sends a photo of a damaged appliance, a vision model turns the image into structured context the agent can reason about, plugged into the existing graph as a pre-step (\texttt{before\_agent} middleware) so nothing downstream had to change.
+        \item Restored visibility into the agent's decisions in production~--- when the main language model fails over to a backup, every step is now captured in the team's tracing tool ({\bf LangSmith}); previously these failovers were a black box.
+        \item Set the architectural baseline for the next milestone of the agent platform (target architecture write-up plus a decision log) and stood up a documentation pipeline so engineers can publish design docs from markdown without involving ops.
+        \item Rebuilt the new-engineer onboarding experience (multi-repo orchestration, onboarding docs, multi-account SSH config) so anyone joining the team can clone and run the whole platform end-to-end on day one.
       \end{cvitems}
     }
 
@@ -30,14 +38,14 @@
     {
       \begin{cvitems}
         \item Joined as Senior Data Engineer and promoted to Tech Specialist after 5 months for impact on the team's platform and engineering practice.
-        \item Owned the data-engineering hiring loop: ran {\bf 20+ technical interviews} for senior data-engineering positions, authored the interview rubric and feedback template the team still uses, and ran candidate calibrations with the engineering manager.
-        \item Held weekly {\bf 1:1s} focused on growth, unblockers, and career direction, and wrote the {\bf onboarding playbook} that lets a new hire become productive in their first two weeks self-serve; drove architectural decisions for the data platform and presented the proposals~--- and the trade-offs~--- to engineering leadership.
-        \item Designed and built the team's central provisioning toolkit so we could stand up a {\bf ClickHouse} cluster, its monitoring, and a managed {\bf PostgreSQL} with one {\bf Ansible} run~--- including a zero-downtime upgrade path that we had not had before.
-        \item Designed and built the team's CI/CD framework as reusable {\bf GitLab} pipeline components, so any new repo gets DAG delivery, Spark manifest delivery, semantic releases, and proxy-aware Docker builds for free instead of copy-pasting boilerplate.
-        \item Stood up the team's {\bf dbt} project end to end (staging plus marts) covering transactions, orders, carts, credit, and the user dimension, and wired it into the existing {\bf Airflow} and ClickHouse stack so analytics models became reviewable, testable code instead of ad-hoc SQL.
-        \item Built the team's data observability stack: a generic {\bf Airflow}-based data-quality framework (completeness, freshness, uniqueness, consistency~--- chunked and retry-aware), a schema-change detector that posts alerts to Microsoft Teams via {\bf Kafka}, and a daily backfill pipeline that keeps the search-product warehouse mirror consistent for a critical credit dataset.
-        \item Built the user-category mapping service that joins behavioral data and applies a ranking model in {\bf ClickHouse} to produce risk-tier scores feeding into credit decisions.
-        \item Stood up the team's streaming backbone ({\bf Kafka via Strimzi on Kubernetes}), matured the {\bf GitOps} delivery model on top of {\bf ArgoCD}, and integrated {\bf HashiCorp Vault} as the single source of truth for credentials.
+        \item Owned hiring for the data team: ran {\bf 20+ technical interviews}, wrote the interview rubric and feedback template the team still uses, and ran candidate calibrations with the engineering manager so decisions stayed consistent across rounds.
+        \item Held weekly {\bf 1:1s} with team members focused on growth, unblockers, and career direction; wrote the {\bf onboarding playbook} that lets a new hire become productive in their first two weeks self-serve; and presented architectural proposals (with their trade-offs) to engineering leadership.
+        \item Cut platform setup from a multi-day manual ritual to a one-command run: built a provisioning toolkit (in {\bf Ansible}) that stands up a {\bf ClickHouse} cluster, its monitoring, and a managed {\bf PostgreSQL}~--- including a zero-downtime upgrade path the team didn't previously have.
+        \item Built the team's CI/CD framework as reusable {\bf GitLab} pipeline components, so any new repo gets DAG delivery, Spark job delivery, semantic releases, and proxy-aware Docker builds out of the box instead of copy-pasting boilerplate.
+        \item Stood up the team's {\bf dbt} project end to end (staging plus marts) covering transactions, orders, carts, credit, and the user dimension on the existing {\bf Airflow} + ClickHouse stack, turning analytics from ad-hoc SQL into reviewable, testable code.
+        \item Built a ``trust layer'' for the data: a generic data-quality framework (completeness, freshness, uniqueness, consistency~--- chunked and retry-aware), a schema-change detector that alerts Microsoft Teams via {\bf Kafka}, and a daily backfill that keeps a critical credit-warehouse mirror in sync. One bad table no longer breaks the whole run.
+        \item Built the user-category mapping service: joins behavioral data with a ranking model in {\bf ClickHouse} to produce risk-tier scores feeding into credit decisions.
+        \item Stood up the team's streaming backbone ({\bf Kafka} via {\bf Strimzi} on {\bf Kubernetes}), matured the {\bf GitOps} delivery model on top of {\bf ArgoCD}, and integrated {\bf HashiCorp Vault} so credentials lived in one place instead of being scattered across env files.
       \end{cvitems}
     }
 
@@ -47,10 +55,10 @@
     {May 2024 - Apr 2025}
     {
       \begin{cvitems}
-        \item Led a team of {\bf 5 engineers} through the greenfield build of a ClickHouse-centered analytics platform for a national aid-distribution program.
-        \item Ran {\bf 4 architectural decision sessions} end to end~--- R\&D, prototyping, presentation, decision log~--- covering OLAP store choice, ETL vs.\ ELT, and on-prem vs.\ cloud trade-offs, so the customer could sign off on the architecture with confidence rather than on instinct.
-        \item Built the batch ingestion bridge from a legacy {\bf Oracle} system into the new analytics warehouse, using Python with SQLAlchemy and pandas, so the team could decommission the old reporting stack on a known schedule.
-        \item Established the engineering practice the team has stuck with: a meta-repo for multi-project orchestration, Git conventions, a code-style guide, mandatory code review, and an on-call runbook.
+        \item Led {\bf 5 engineers} through the greenfield build of a national aid-distribution analytics platform, with {\bf ClickHouse} at its core.
+        \item Ran {\bf 4 architectural decision sessions} end to end (R\&D, prototype, presentation, decision log) covering analytics-database choice, ETL vs.\ ELT, and on-prem vs.\ cloud~--- so the customer could sign off on the architecture with evidence in hand rather than on instinct.
+        \item Built the bridge that retired a legacy {\bf Oracle} reporting stack: a Python ingestion pipeline (SQLAlchemy, pandas) that mirrored operational tables into the new warehouse on a known schedule, so the team could turn the old system off with confidence.
+        \item Established the engineering practice the team has stuck with~--- meta-repo for multi-project orchestration, Git conventions, code-style guide, mandatory code review, and an on-call runbook~--- so the team had a working culture, not just code.
       \end{cvitems}
     }
 
@@ -60,12 +68,12 @@
     {Mar 2023 - May 2024}
     {
       \begin{cvitems}
-        \item Greenfield design of the brokerage's first analytics data platform~--- I owned the architecture, the technology selection, and the core framework code.
+        \item Designed and built the brokerage's first analytics data platform from a blank page~--- I owned the architecture, the technology choices, and the core framework code.
         \item Ran the R\&D and tool-selection process across the full stack (analytics database, container orchestration, GitOps delivery, secret management, workflow orchestration, object storage, data catalog, BI, monitoring, logging) and wrote up the architecture as a living document the rest of the team could ramp up on.
-        \item Designed and built the change-data-capture framework that automated replication of all operational tables from the legacy {\bf SQL Server} warehouse into the new analytics warehouse~--- the framework generates {\bf ClickHouse} DDL on the fly and handles the awkward cases (decimal precision and scale, binary columns, Jalali dates, version columns, late-arriving updates) without manual intervention.
-        \item Designed and built the team's data-quality framework with separate query paths for SQL Server and ClickHouse and table-level configuration, so onboarding a new table to data-quality monitoring is a YAML change instead of new code.
-        \item Stood up the {\bf Kubernetes} platform from bare metal to running production: {\bf RKE} for cluster bootstrap, {\bf ArgoCD} for delivery, ingress and config exposure for {\bf Airflow} / {\bf Grafana} / Longhorn, and a systemd-managed Kafka cluster running KRaft mode for the change-data-capture pipeline.
-        \item Authored the engineering methodology the team adopted~--- 2-week sprints, 20-minute daily standups, grooming, planning, retro, OKR-driven backlog, push-based ownership~--- and wrote it up as a doc the team could refer back to instead of folklore.
+        \item Automated the move from the legacy {\bf SQL Server} warehouse to the new {\bf ClickHouse} one with a change-data-capture framework I designed: it generated the destination tables on the fly and handled the awkward cases (decimal precision and scale, binary columns, Jalali dates, version columns, late-arriving updates) without manual intervention.
+        \item Built a data-quality framework the team can extend without writing code~--- separate query paths for SQL Server and ClickHouse, table-level configuration~--- so onboarding a new table to monitoring is a YAML change.
+        \item Stood up the {\bf Kubernetes} platform from bare metal to production: {\bf RKE} for cluster bootstrap, {\bf ArgoCD} for delivery, ingress and config exposure for {\bf Airflow} / {\bf Grafana} / Longhorn, and a systemd-managed Kafka cluster (KRaft mode) feeding the change-data-capture pipeline.
+        \item Authored the engineering methodology the team adopted (2-week sprints, 20-minute daily standups, grooming, planning, retro, OKR-driven backlog, push-based ownership) and wrote it up as a doc the team could refer back to instead of folklore.
         \item Packaged {\bf Metabase} as a reusable {\bf Helm} chart so the BI tool could be deployed identically across staging and production.
       \end{cvitems}
     }
@@ -76,10 +84,10 @@
     {Apr 2023 - Nov 2024}
     {
       \begin{cvitems}
-        \item Cut {\bf AWS} spend by {\bf $\sim$40\%} through right-sizing, Reserved Instance commitments, S3 lifecycle policies, and a sweep of orphaned compute and log retention~--- all with no service degradation.
-        \item Migrated the production stack off Docker-Compose-on-EC2 onto {\bf AWS ECS} with an Application Load Balancer and a proper image promotion pipeline through ECR, eliminating the single-host outage class entirely.
-        \item Built the company's observability stack end to end ({\bf Prometheus}, {\bf Alertmanager}, {\bf Grafana} dashboards, {\bf CloudWatch} metrics) with on-call routing so issues found us before customers did.
-        \item Owned the infrastructure-as-code repos that provisioned everything~--- {\bf Terraform} and {\bf Ansible} modules, GitLab-CI templates, AWS auth and backup pipelines~--- making infra changes reviewable code instead of clicks in the console.
+        \item Cut {\bf AWS} spend by {\bf $\sim$40\%}~--- right-sizing, Reserved Instance commitments, S3 lifecycle policies, and a sweep of orphaned compute and log retention~--- with no impact on service.
+        \item Migrated the production stack off ``one EC2 box running Docker-Compose'' onto {\bf AWS ECS} behind an Application Load Balancer, with a proper image-promotion pipeline through ECR; a single-host outage was no longer a way the company could go down.
+        \item Built the company's observability stack end to end ({\bf Prometheus}, {\bf Alertmanager}, {\bf Grafana} dashboards, {\bf CloudWatch} metrics) with on-call routing, so issues found us before customers did.
+        \item Owned the infrastructure-as-code repos that provisioned everything ({\bf Terraform} and {\bf Ansible} modules, GitLab-CI templates, AWS auth and backup pipelines), making infra changes reviewable code instead of clicks in the console.
         \item Unified secret management so credentials lived in one source of truth instead of being copy-pasted across env files.
       \end{cvitems}
     }
@@ -90,10 +98,10 @@
     {Jan 2021 - Apr 2023}
     {
       \begin{cvitems}
-        \item Co-built {\bf Backbone}, the internal platform that gave the data-science team a one-button path from notebook to production. Backbone deploys 15+ DS services (search, recommendation, query processing, trending, spell correction, synonym, snowplow, etc.) onto a shared {\bf Spark} + {\bf Airflow} + {\bf Pinot} stack, so data scientists can ship models without writing Kubernetes YAML or pipeline code from scratch.
-        \item Got {\bf up to a 10x query speed-up} on production OLAP workloads~--- billions of rows of clickstream and order data~--- by introducing {\bf Apache Pinot} with hand-tuned star-tree indexes and rewriting the heaviest dashboard queries to use them.
-        \item Tuned the company's Kafka brokers for production load (compression, page-cache tuning, ACLs, broker-side config) and shrank both consumer lag and disk pressure on the busiest topics.
-        \item Brought {\bf GitOps} into the data org: {\bf ArgoCD} plus {\bf Kustomize} plus Kaniko/Dagger CI, replacing manual \texttt{kubectl apply} and per-service shell scripts.
+        \item Co-built {\bf Backbone}, the internal platform that gave the data-science team a one-button path from notebook to production. Backbone deploys 15+ data-science services (search, recommendation, query processing, trending, spell correction, synonym, snowplow, etc.) onto a shared {\bf Spark} + {\bf Airflow} + {\bf Pinot} stack, so data scientists ship models without writing Kubernetes YAML or pipeline code from scratch.
+        \item Got {\bf up to a 10x query speed-up} on production OLAP workloads (billions of rows of clickstream and order data) by introducing {\bf Apache Pinot} with hand-tuned star-tree indexes and rewriting the heaviest dashboard queries to use them~--- dashboards that used to take tens of seconds now load instantly.
+        \item Tuned the company's Kafka brokers for production load (compression, page-cache tuning, ACLs, broker-side config), shrinking both consumer lag and disk pressure on the busiest topics.
+        \item Brought {\bf GitOps} into the data org ({\bf ArgoCD} + {\bf Kustomize} + Kaniko/Dagger CI), replacing manual \texttt{kubectl apply} and per-service shell scripts with a model where every change ships as a reviewable pull request.
         \item Stood up production-ready Kubernetes clusters with {\bf RKE} and {\bf Kubespray} for both development and production environments.
       \end{cvitems}
     }
@@ -104,7 +112,7 @@
     {May 2021 - May 2022}
     {
       \begin{cvitems}
-        \item Built a sales-analytics web app for Amazon sellers~--- periodic data pulls from the {\bf Amazon} API, ETL into an analytics warehouse, dashboards on top~--- and wired up the CI/CD that ships it. Also pulled marketing and CRM data ({\bf Ontraport}, {\bf Close}, {\bf Google Ads}, {\bf Google Analytics}, {\bf Oncehub}, {\bf Thinkific}, {\bf HelloSign}) into the same warehouse.
+        \item Built a sales-analytics web app for Amazon sellers~--- periodic pulls from the {\bf Amazon} API into an analytics warehouse with dashboards on top~--- and wired up the CI/CD that ships it. Also pulled marketing and CRM data ({\bf Ontraport}, {\bf Close}, {\bf Google Ads}, {\bf Google Analytics}, {\bf Oncehub}, {\bf Thinkific}, {\bf HelloSign}) into the same warehouse so the team could see all customer signals in one place.
       \end{cvitems}
     }
 
@@ -124,7 +132,7 @@
     {May 2019 - Dec 2019}
     {
       \begin{cvitems}
-        \item Stood up the data infrastructure for a human-centered AI startup advised by Dr.\ Hamid R.\ Rabiee and Dr.\ Maryam Ramezani~--- message bus, search index, document store, and the developer toolchain around them.
+        \item Stood up the data infrastructure for a human-centered AI startup advised by Dr.\ Hamid R.\ Rabiee and Dr.\ Maryam Ramezani~--- message bus, search index, document store, and the developer toolchain around them~--- so the small team could focus on the product instead of the plumbing.
       \end{cvitems}
     }
 
