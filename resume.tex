@@ -32,6 +32,29 @@
 % If you would like to change the social information separator from a pipe (|) to something else
 \renewcommand{\acvHeaderSocialSep}{\quad\textbar\quad}
 
+% -----------------------------------------------------------------------------
+% Layout patch: the upstream russell.cls definition of \cventrynew uses a
+% negative \vspace{-1.5mm} at the top of every entry and a vertically-centered
+% L{} column for the description. With multi-bullet entries (cvitems contains
+% a -4mm \vspace at its start), LaTeX under-estimates the cell height and the
+% next entry's title row visually collides with the previous entry's last
+% bullets. We override \cventrynew here to remove the negative leading vspace,
+% add a small trailing padding inside the description cell, and put a fixed
+% gutter between consecutive entries. The visible layout is otherwise
+% identical to russell.cls's original.
+% -----------------------------------------------------------------------------
+\renewcommand*{\cventrynew}[3]{%
+  \setlength\tabcolsep{0pt}%
+  \setlength{\extrarowheight}{0pt}%
+  \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} L{\textwidth - 4.5cm} R{4.5cm}}
+    \ifempty{#1#2}
+      {\entrydatestyle{#2} \\}
+      {\entrytitlestyle{#1} & \entrylocationstyle{#2} \\}
+    \multicolumn{2}{L{\textwidth}}{\descriptionstyle{#3}\vspace{1mm}}
+  \end{tabular*}%
+  \par\addvspace{3mm}%
+}
+
 
 %-------------------------------------------------------------------------------
 %	PERSONAL INFORMATION
@@ -40,26 +63,17 @@
 % Available options: circle|rectangle,edge/noedge,left/right
 % \photo[rectangle,edge,right]{./examples/profile}
 \name{\LARGE Mostafa}{\LARGE Ghadimi}
-% \position{Software Architect{\enskip\cdotp\enskip}Security Expert}
+\position{Senior Data \& AI Engineer{\enskip\cdotp\enskip}Tech Lead{\enskip\cdotp\enskip}Platform \& AI}
 
-% \address{YOUR ADDRESS}
-\mobile{+98 (912) 072 7175}
+% Istanbul-based, open to global remote roles. Also serves as an ATS-readable
+% plain-text location line for resume scanners that ignore icon glyphs.
+\address{Istanbul, T\"urkiye{\enskip\cdotp\enskip}Open to Remote}
+\mobile{+98 912 072 7175}
 \email{mostafa.ghadimi76@gmail.com}
-%\dateofbirth{January 1st, 1970}
-\homepage{mostafaghadimi.github.io} 
+\homepage{mostafaghadimi.github.io}
 \github{github.com/mostafaghadimi}
 \linkedin{linkedin.com/in/mostafaghadimi}
-% \gitlab{gitlab-id}
 \stackoverflow{7310077}{mostafa-ghadimi}
-% \twitter{@twit}
-% \skype{skype-id}
-% \reddit{reddit-id}
-% \medium{madium-id}
-% \kaggle{kaggle-id}
-% \googlescholar{googlescholar-id}{name-to-display}
-%% \firstname and \lastname will be used
-% \googlescholar{googlescholar-id}{}
-% \extrainfo{extra information}
 
 % \quote{``Simplicity is deceptively complicated."}
 
@@ -85,10 +99,7 @@
 \input{cv/skills.tex}
 \input{cv/experience.tex}
 \input{cv/education.tex}
-
-% \input{cv/projects.tex}
-% \input{cv/Competitions.tex}
-% \input{cv/certificates.tex}
+\input{cv/certificates.tex}
 \input{cv/achievements.tex}
 \input{cv/languages.tex}
 

@@ -1,0 +1,65 @@
+name: Build resume
+
+# Build resume.pdf on every push to main (and on pull requests) that touches
+# the LaTeX sources, and publish the resulting PDF as a downloadable workflow
+# artifact tagged with a UTC build timestamp (e.g. resume-2026-05-18-19-50).
+#
+# The PDF is intentionally NOT committed back to the repo — to grab a fresh
+# copy, open the workflow run on GitHub Actions and download the artifact.
+#
+# Also runnable on demand via the "Run workflow" button (workflow_dispatch).
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "**/*.tex"
+      - "**/*.cls"
+      - "cv/fonts/**"
+      - "Makefile"
+      - ".github/workflows/build-resume.yml"
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - "**/*.tex"
+      - "**/*.cls"
+      - "cv/fonts/**"
+
+# Read-only is enough — we no longer push the PDF back to the repo.
+permissions:
+  contents: read
+
+# If a newer build is queued for the same branch, cancel the older one.
+concurrency:
+  group: build-resume-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Compute build timestamp
+        id: timestamp
+        # YYYY-MM-DD-HH-MM in UTC, used to version the published artifact.
+        run: echo "value=$(date -u '+%Y-%m-%d-%H-%M')" >> "$GITHUB_OUTPUT"
+
+      - name: Build resume.pdf with xelatex (via latexmk)
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: resume.tex
+          latexmk_use_xelatex: true
+          # Match the local Makefile flags exactly so CI and local stay in sync.
+          args: -xelatex -interaction=nonstopmode -halt-on-error -file-line-error -shell-escape
+
+      - name: Upload resume.pdf as a versioned workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          # Example: resume-2026-05-18-19-50
+          name: resume-${{ steps.timestamp.outputs.value }}
+          path: resume.pdf
+          if-no-files-found: error
+          retention-days: 90

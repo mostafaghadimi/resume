@@ -1,0 +1,117 @@
+# =============================================================================
+# .gitignore for a LaTeX resume project.
+#
+# The build output (resume.pdf) is intentionally ignored — it is rebuilt by
+# CI on every push and published as a versioned workflow artifact instead of
+# being committed back to the repo. Run `make` locally or download the
+# artifact from the GitHub Actions run page to get a fresh PDF.
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Build output (do not commit — built in CI as an artifact)
+# -----------------------------------------------------------------------------
+resume.pdf
+
+# -----------------------------------------------------------------------------
+# OS noise
+# -----------------------------------------------------------------------------
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# -----------------------------------------------------------------------------
+# Editor / IDE noise
+# -----------------------------------------------------------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+\#*\#
+.#*
+
+# -----------------------------------------------------------------------------
+# LaTeX intermediate files (latexmk, xelatex, pdflatex, biber/bibtex, etc.)
+#   Adapted from the canonical TeX gitignore template.
+# -----------------------------------------------------------------------------
+
+# Core auxiliary files
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+.*.lb
+
+# Intermediate documents
+*.dvi
+*.xdv
+*-converted-to.*
+
+# Bibliography auxiliary files (bibtex/biblatex/biber)
+*.bbl
+*.bcf
+*.blg
+*-blx.aux
+*-blx.bib
+*.run.xml
+
+# Build tool databases / metadata
+*.fdb_latexmk
+*.synctex
+*.synctex(busy)
+*.synctex.gz
+*.synctex.gz(busy)
+*.pdfsync
+
+# Beamer specific
+*.nav
+*.pre
+*.snm
+*.vrb
+
+# hyperref
+*.brf
+
+# listings
+*.lol
+
+# minted / pygments
+_minted-*/
+*.pyg
+
+# glossaries / acronyms
+*.acn
+*.acr
+*.alg
+*.glg
+*.glo
+*.gls
+*.glsdefs
+*.ist
+*.lzo
+*.lzs
+
+# makeindex
+*.idx
+*.ilg
+*.ind
+
+# todonotes
+*.tdo
+
+# xindy
+*.xdy
+
+# latexindent backup files
+*.bak[0-9]*
+indent.log
