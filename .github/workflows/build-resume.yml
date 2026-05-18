@@ -1,11 +1,19 @@
 name: Build resume
 
 # Build resume.pdf on every push to main (and on pull requests) that touches
-# the LaTeX sources, and publish the resulting PDF as a downloadable workflow
-# artifact tagged with a UTC build timestamp (e.g. resume-2026-05-18-19-50).
+# the LaTeX sources, and publish the resulting PDF in two places:
 #
-# The PDF is intentionally NOT committed back to the repo — to grab a fresh
-# copy, open the workflow run on GitHub Actions and download the artifact.
+#   1. As a versioned workflow artifact (resume-YYYY-MM-DD-HH-MM) on the run
+#      page. Useful for PR builds where we do NOT want to create a release.
+#   2. As a GitHub Release tagged build-YYYY-MM-DD-HH-MM with resume.pdf
+#      attached, on push to main and on workflow_dispatch only. Each release
+#      is marked as the repository's "latest", so the stable, public URL
+#
+#          https://github.com/<owner>/<repo>/releases/latest/download/resume.pdf
+#
+#      always serves the freshest PDF — no sign-in required, no expiry.
+#
+# The PDF is intentionally NOT committed back to the repo.
 #
 # Also runnable on demand via the "Run workflow" button (workflow_dispatch).
 
@@ -26,9 +34,12 @@ on:
       - "**/*.cls"
       - "cv/fonts/**"
 
-# Read-only is enough — we no longer push the PDF back to the repo.
+# `contents: write` is required so the release step can create tags and
+# upload assets to the repo on our behalf. PR builds from forks won't be
+# granted write tokens, but they also skip the release step (see `if:` below),
+# so they continue to work correctly with the lower fork-token permissions.
 permissions:
-  contents: read
+  contents: write
 
 # If a newer build is queued for the same branch, cancel the older one.
 concurrency:
@@ -44,7 +55,8 @@ jobs:
 
       - name: Compute build timestamp
         id: timestamp
-        # YYYY-MM-DD-HH-MM in UTC, used to version the published artifact.
+        # YYYY-MM-DD-HH-MM in UTC, used to version both the workflow artifact
+        # and the GitHub Release tag.
         run: echo "value=$(date -u '+%Y-%m-%d-%H-%M')" >> "$GITHUB_OUTPUT"
 
       - name: Build resume.pdf with xelatex (via latexmk)
@@ -63,3 +75,22 @@ jobs:
           path: resume.pdf
           if-no-files-found: error
           retention-days: 90
+
+      - name: Publish resume.pdf to a versioned GitHub Release
+        # Skip on pull requests: PRs from forks don't get a write-scoped token,
+        # and we don't want PR builds creating releases on the base repo
+        # anyway. Push to main and manual runs (workflow_dispatch) do publish.
+        if: github.event_name != 'pull_request'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: build-${{ steps.timestamp.outputs.value }}
+          name: Resume build ${{ steps.timestamp.outputs.value }}
+          body: |
+            Automated build of `resume.pdf` from commit `${{ github.sha }}`.
+
+            **Stable URL for the most recent build:**
+            https://github.com/${{ github.repository }}/releases/latest/download/resume.pdf
+          files: resume.pdf
+          # Mark this release as the repo's "latest" so the URL above always
+          # resolves to the freshest PDF.
+          make_latest: "true"
