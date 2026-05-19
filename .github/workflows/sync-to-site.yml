@@ -35,8 +35,22 @@ name: Sync resume.pdf to mostafaghadimi.github.io
 # also trigger the sync manually from the Actions tab via "Run workflow".
 
 on:
+  # Primary trigger. `release: published` looks like the obvious choice but
+  # GitHub will NOT fire a `release` event when the release is created by
+  # another workflow using the default `GITHUB_TOKEN` (anti-recursion
+  # safeguard). `build-resume.yml` creates its release with `GITHUB_TOKEN`,
+  # so we instead watch for that workflow finishing and resolve the tag at
+  # runtime via `gh release view`.
+  workflow_run:
+    workflows: ["Build resume"]
+    types: [completed]
+    branches: [main]
+
+  # Also fire if a release is published manually (CLI or UI). Manual
+  # publishes happen under the user's PAT — those DO cascade through.
   release:
     types: [published]
+
   workflow_dispatch:
     inputs:
       release_tag:
@@ -58,6 +72,13 @@ concurrency:
 jobs:
   sync:
     runs-on: ubuntu-latest
+    # Skip the run when the upstream Build resume failed — otherwise we'd
+    # try to sync stale/missing release artifacts. `workflow_dispatch` and
+    # `release` events always run.
+    if: >-
+      github.event_name == 'release' ||
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
     steps:
       - name: Verify SITE_REPO_TOKEN is set
         env:
