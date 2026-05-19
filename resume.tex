@@ -73,6 +73,10 @@
 % Available options: circle|rectangle,edge/noedge,left/right
 % \photo[rectangle,edge,right]{./examples/profile}
 \name{\LARGE Mostafa}{\LARGE Ghadimi}
+% Override the upstream header position style so it does NOT use \scshape.
+% Small-caps rendering caused ATS-extracted text to read "SENiOR" (lowercase i),
+% which downstream resume scanners flag as a typo. Plain mixed-case fixes it.
+\renewcommand*{\headerpositionstyle}[1]{{\fontsize{8.4pt}{1em}\bodyfont\color{russell-black} #1}}
 \position{Senior Data \& AI Engineer{\enskip\cdotp\enskip}Tech Lead{\enskip\cdotp\enskip}Platform \& AI}
 
 % Istanbul-based, open to global remote roles. Also serves as an ATS-readable
@@ -83,7 +87,9 @@
 \homepage{mostafaghadimi.github.io}
 \github{github.com/mostafaghadimi}
 \linkedin{linkedin.com/in/mostafaghadimi}
-\stackoverflow{7310077}{mostafa-ghadimi}
+% The \stackoverflow macro renders \faStackOverflow as the icon, which the PDF
+% text layer extracts as a stray "p" character (ATS-unfriendly). Disabled.
+% \stackoverflow{7310077}{mostafa-ghadimi}
 
 % \quote{``Simplicity is deceptively complicated."}
 
