@@ -1,0 +1,146 @@
+name: Sync resume.pdf to mostafaghadimi.github.io
+
+# After every successful resume build, the companion workflow
+# `build-resume.yml` publishes a versioned GitHub Release with `resume.pdf`
+# attached. This workflow listens for that release event and copies the
+# freshly-built PDF into the portfolio site repo at
+# `mostafaghadimi.github.io/public/resume.pdf`, so the live site at
+# https://mostafaghadimi.github.io/resume.pdf always serves the latest
+# build without any manual file-copying.
+#
+# ------------------------------------------------------------------------
+# One-time setup — required before this workflow can push to the other repo
+# ------------------------------------------------------------------------
+#
+# This repo cannot push to `mostafaghadimi.github.io` with the default
+# `GITHUB_TOKEN` (it's scoped to a single repo). You need to add ONE
+# repository secret:
+#
+#   1. Create a fine-grained Personal Access Token at
+#        https://github.com/settings/personal-access-tokens/new
+#      with:
+#        - Resource owner:  mostafaghadimi
+#        - Repository access: Only select repositories → mostafaghadimi.github.io
+#        - Repository permissions:
+#            Contents:        Read and write
+#            Metadata:        Read-only  (added automatically)
+#        - Expiration: 1 year (or whatever you're comfortable with)
+#
+#   2. Copy the generated token and add it as a secret on THIS repo:
+#        https://github.com/mostafaghadimi/resume/settings/secrets/actions/new
+#        Name:  SITE_REPO_TOKEN
+#        Value: <paste the token>
+#
+# Once that secret exists, every new release will trigger a sync. You can
+# also trigger the sync manually from the Actions tab via "Run workflow".
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "Release tag to pull resume.pdf from (defaults to latest release)"
+        required: false
+        default: ""
+
+# This workflow does not need to write to the resume repo itself — only to
+# read its own releases. All writes go to the site repo via SITE_REPO_TOKEN.
+permissions:
+  contents: read
+
+# Serialize syncs so two releases firing close together can't race against
+# each other on the destination repo's working tree.
+concurrency:
+  group: sync-resume-to-site
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify SITE_REPO_TOKEN is set
+        env:
+          SITE_REPO_TOKEN: ${{ secrets.SITE_REPO_TOKEN }}
+        run: |
+          if [[ -z "${SITE_REPO_TOKEN}" ]]; then
+            echo "::error::SITE_REPO_TOKEN secret is missing. See the comment block at the top of this workflow for how to create it."
+            exit 1
+          fi
+
+      - name: Resolve release tag
+        id: tag
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          INPUT_TAG: ${{ inputs.release_tag }}
+          EVENT_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          # release event → use the published release's tag
+          # workflow_dispatch with input → use the input
+          # workflow_dispatch without input → fall back to "latest"
+          TAG="${EVENT_TAG:-$INPUT_TAG}"
+          if [[ -z "${TAG}" ]]; then
+            TAG="$(gh release view --repo "${GITHUB_REPOSITORY}" --json tagName --jq .tagName)"
+          fi
+          echo "Resolved release tag: ${TAG}"
+          echo "tag=${TAG}" >> "${GITHUB_OUTPUT}"
+
+      - name: Download resume.pdf from the release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release download "${{ steps.tag.outputs.tag }}" \
+            --repo "${GITHUB_REPOSITORY}" \
+            --pattern "resume.pdf" \
+            --output "resume.pdf"
+          ls -la resume.pdf
+          file resume.pdf
+
+      - name: Check out mostafaghadimi.github.io (master)
+        uses: actions/checkout@v5
+        with:
+          repository: mostafaghadimi/mostafaghadimi.github.io
+          ref: master
+          token: ${{ secrets.SITE_REPO_TOKEN }}
+          path: site
+          persist-credentials: true
+          fetch-depth: 1
+
+      - name: Replace public/resume.pdf in site repo
+        run: |
+          mkdir -p site/public
+          cp -f resume.pdf site/public/resume.pdf
+
+      - name: Commit and push (only if the PDF actually changed)
+        id: commit
+        working-directory: site
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          if git diff --quiet -- public/resume.pdf; then
+            echo "resume.pdf is byte-identical to what's already on master — skipping commit."
+            echo "changed=false" >> "${GITHUB_OUTPUT}"
+            exit 0
+          fi
+
+          git add public/resume.pdf
+          git commit -m "chore(resume): sync resume.pdf from ${{ steps.tag.outputs.tag }}" \
+                     -m "Source release: https://github.com/${GITHUB_REPOSITORY}/releases/tag/${{ steps.tag.outputs.tag }}"
+          git push origin master
+          echo "changed=true" >> "${GITHUB_OUTPUT}"
+
+      - name: Summary
+        run: |
+          {
+            echo "## Resume sync result"
+            echo ""
+            echo "- **Source release**: [\`${{ steps.tag.outputs.tag }}\`](https://github.com/${GITHUB_REPOSITORY}/releases/tag/${{ steps.tag.outputs.tag }})"
+            echo "- **Target**: \`mostafaghadimi/mostafaghadimi.github.io@master\` → \`public/resume.pdf\`"
+            if [[ "${{ steps.commit.outputs.changed }}" == "true" ]]; then
+              echo "- **Status**: ✅ committed and pushed (site will redeploy automatically)"
+              echo "- **Live URL**: https://mostafaghadimi.github.io/resume.pdf"
+            else
+              echo "- **Status**: ⏭️ PDF unchanged — no commit was created"
+            fi
+          } >> "${GITHUB_STEP_SUMMARY}"
